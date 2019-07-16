@@ -20,23 +20,26 @@
       <!-- 登录信息 -->
       <div>
         <div>
-          <el-dropdown>
-            <span class="el-dropdown-link">
-              <img
-                src="https://c-ssl.duitang.com/uploads/item/201811/10/20181110102045_jwqny.jpg"
-              />
-              用户消息
-              <i class="el-icon-arrow-down el-icon--right"></i>
-            </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
-              <el-dropdown-item disabled>双皮奶</el-dropdown-item>
-              <el-dropdown-item divided>蚵仔煎</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <nuxt-link to="/user/login">登录 / 注册</nuxt-link>
+          <div v-if="!$store.state.user.userInfo.token">
+            <nuxt-link to="/user/login">登录 / 注册</nuxt-link>
+          </div>
+          <div v-else>
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <!-- 用户图片 -->
+                <img :src="$axios.defaults.baseURL + $store.state.user.userInfo.user.defaultAvatar" />
+                <!-- 用户消息 -->
+                {{$store.state.user.userInfo.user.nickname}}
+                <i
+                  class="el-icon-arrow-down el-icon--right"
+                ></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>个人中心</el-dropdown-item>
+                <el-dropdown-item>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
         </div>
       </div>
     </el-row>
@@ -44,7 +47,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    // console.log(this.$store.state.user)
+  }
+};
 </script>
 
 <style lang="less" scoped>
@@ -87,17 +97,14 @@ export default {};
     }
   }
 }
-.el-dropdown-link{
- 
-  
-img{
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  vertical-align: middle;
-  margin-right: 10px;
-}
-
+.el-dropdown-link {
+  img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
 }
 </style>
 
