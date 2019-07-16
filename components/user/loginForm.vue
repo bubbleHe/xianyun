@@ -27,7 +27,7 @@
         <el-button 
         class="submit"
         type="primary"
-        @click="handleLoginSubmit">
+        @click.native="handleLoginSubmit">
             登录
         </el-button>
     </el-form>
@@ -58,6 +58,12 @@ methods:{
             if(valid){
                 // 调用actions的登录方法
                 this.$store.dispatch('user/login',this.form)
+                .then(res=>{
+                    this.$message.success('登录成功正在跳转....')
+                    setTimeout(() => {
+                        this.$router.back();
+                    }, 1000);
+                })
             }
         })
     }

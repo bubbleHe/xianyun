@@ -18,7 +18,17 @@ export const mutations={
     // 设置用户的数据
         setUserInfo(state,data){
             state.userInfo=data;
+        },
+
+    //退出
+    clearUserInfo(state){
+        state.userInfo={
+            token:'',
+            user:{
+                
+            }
         }
+    }
 }
 
 
