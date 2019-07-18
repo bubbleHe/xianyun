@@ -11,7 +11,8 @@
 
         <!-- banner广告 -->
         <div class="sale-banner">
-            <img src="http://157.122.54.189:9093/images/pic_sale.jpeg">
+          <!-- 仅做娱乐 -->
+            <img src="https://cn.bing.com/th?id=OIP.c6Y7Q1SkXu7AJY5tfAg5OAHaE8&pid=Api&rs=1&p=0">
         </div>
     </el-row>
 
@@ -38,13 +39,24 @@
 
     <!-- 特价机票 -->
     <div class="air-sale">
-        
+        <el-row type="flex" class="air-sale-pic" justify="space-between">
+            <el-col :span="6" v-for="(item, index) in sales" :key="index">
+                <nuxt-link :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`">
+                    <img :src="item.cover"/>
+                    <el-row class="layer-bar" type="flex" justify="space-between">
+                        <span>{{item.departCity}}-{{item.destCity}}</span>
+                        <span>￥699</span>
+                    </el-row>
+                </nuxt-link>
+            </el-col>
+        </el-row>
     </div>
   </section>
 </template>
 
 <script>
 import SearchForm from "@/components/air/searchForm"
+
 export default {
     components: {
         SearchForm
@@ -53,6 +65,18 @@ export default {
 </script>
 
 <style scoped lang="less">
+.sale-banner{
+  width: 600px;
+  height: 350px;
+  position: relative;
+  img{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+  }
+}
 .air-sale{
   border: 1px #ddd solid;
   padding:20px;
