@@ -58,6 +58,21 @@
 import SearchForm from "@/components/air/searchForm"
 
 export default {
+  mounted(){
+    this.$axios({
+      url:"/airs/sale",
+
+    }).then(res=>{
+      this.sales=res.data.data
+      // const {data}=res.data
+      // this.sales=data
+    })
+  },
+  data () {
+    return {
+      sales: []
+    }
+  },
     components: {
         SearchForm
     }
