@@ -16,8 +16,8 @@
                             <span>{{rankTime}}</span>
                         </el-col>
                         <el-col :span="8" class="flight-airport">
-                            <strong>22:50</strong>
-                            <span>虹桥机场T2</span>
+                            <strong>{{data.arr_time}}</strong>
+                            <span>{{data.dst_airport_name}} {{data.dst_airport_quay}}</span>
                         </el-col>
                     </el-row>
                 </el-col>

@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters :data="cacheFlightsData"  @changeFlights="changeFlights"/>
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -16,7 +16,7 @@
           @current-change="handleCurrentChange"
           :current-page="pageIndex"
           :page-sizes="[5, 10, 15,20]"
-          :page-size="5"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
         ></el-pagination>
@@ -34,49 +34,24 @@
 import moment from "moment";
 import FlightsListHead from "@/components/air/flightsListHead.vue";
 import FlightsItem from "@/components/air/flightsItem.vue";
+import FlightsFilters from "@/components/air/flightsFilters.vue";
 
 export default {
-  methods: {
-    //页面选规格变化
-    handleSizeChange(value) {
-        this.pageSize = value;
-        this.pageIndex=1;
-        this.setDataList();
-    }
-    ,
-    //当前页面切换
-    handleCurrentChange(value) {
-        this.pageIndex = value;
-            
-            // 设置显示数据列表
-            this.setDataList();
-    },
-    setDataList(){
-      this.dataList=this.flightsData.flights.slice(
-          (this.pageIndex-1)*this.pageSize,
-          this.pageIndex*this.pageSize
+  beforeRouteUpdate(to,from,next){
+    next();
+    this.getData();
+  },
+  computed:{
+    dataList(){
+      return this.flightsData.flights.slice(
+        (this.pageIndex-1)*this.pageSize,
+        this.pageIndex*this.pageSize
       )
+    }
   },
-  },
-  
-  data() {
-    return {
-      flightsData: {
-        flights: []
-      },
-
-      dataList: [],
-      total: 0,
-      pageIndex: 1,
-      pageSize:5
-    };
-  },
-  components: {
-    FlightsListHead,
-    FlightsItem
-  },
-  mounted() {
-    this.$axios({
+  methods: {
+    getData(){
+      this.$axios({
       url: "/airs",
       params: this.$route.query //?
     }).then(res => {
@@ -85,13 +60,77 @@ export default {
 
       //总条数
       this.total = this.flightsData.flights.length;
-      //
-    //   this.setDataList();
-    // this.dataList=this.flightsData.flights.slice(0,5)
-    this.setDataList();
-    });
+
+      //设置缓存列表数据
+      this.cacheFlightsData={...res.data};
+      // this.dataList=this.flightsData.flights.slice(0,5)
+      // this.setDataList();
+    })
+    },
+    //定义父组件传值方法
+    changeFlights(arr){
+      
+      this.flightsData.flights=arr;
+    },
+    //页面选规格变化
+    handleSizeChange(value) {
+      this.pageSize = value;
+      this.pageIndex = 1;
+      // this.setDataList();
+    },
+    //当前页面切换
+    handleCurrentChange(value) {
+      this.pageIndex = value;
+
+      // 设置显示数据列表
+      // this.setDataList();
+    },
+  //   setDataList(arr) {
+  //     //设置datalist 数据
+  //     //arr 使展示的新数据，该方法将会传递给过滤组件使用
+  //     if(arr){
+  //       this.pageIndex=1;
+  //       this.flightsData.flights=arr;
+  //       this.flightsData.total=arr.length;
+  //     }
+  //     this.dataList = this.flightsData.flights.slice(
+  //       (this.pageIndex - 1) * this.pageSize,
+  //       this.pageIndex * this.pageSize
+  //     );
+  //   }
+  },
+
+  data() {
+    return {
+      cacheFlightsData:{
+        flights:[],
+        info:{},
+        options:{}
+      },
+      flightsData: {
+        flights: [],
+        info: {},
+        options: {}
+      },
+
+      // dataList: [],
+      total: 0,
+      pageIndex: 1,
+      pageSize: 5
+    };
+  },
+  components: {
+    FlightsListHead,
+    FlightsItem,
+    FlightsFilters
+  },
+  mounted() {
+    this.pageIndex=1;
+    this.getData();
+    
+    // console.log(data.info)
   }
-};
+}
 </script>
 
 <style scoped lang="less">
