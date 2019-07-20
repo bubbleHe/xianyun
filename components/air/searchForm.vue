@@ -56,6 +56,7 @@
 
 <script>
 import moment from "moment";
+import { stringify } from 'querystring';
 export default {
   data() {
     return {
@@ -203,7 +204,15 @@ export default {
           path:"/air/flights",
           query:this.form
         })
+      };
+      const airs=JSON.parse(localStorage.getItem('airs'))||[]
+      airs.unshift(this.form)
+      if(airs.length>5){
+        airs.length=5
       }
+      //保存数据
+      localStorage.setItem('airs',JSON.stringify(airs))
+
     }
   },
   mounted() {}
